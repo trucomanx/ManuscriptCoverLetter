@@ -15,7 +15,7 @@ import os
 
 from manuscript_cover_letter.modules.lib_cover_basic  import generate_cover_basic1
 from manuscript_cover_letter.modules.lib_cover_style1 import generate_cover_style1
-from manuscript_cover_letter.desktop import about
+from manuscript_cover_letter.desktop import create_desktop_file
 import manuscript_cover_letter.about as about
 
 
