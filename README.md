@@ -2,7 +2,7 @@
 
 Program to generate manuscript cover letters.
 
-![logo](screenshot.png)
+![logo](https://github.com/trucomanx/ManuscriptCoverLetter/blob/main/src/manuscript_cover_letter/icons/logo.png?raw=true)
 
 ## 1. Installing
 

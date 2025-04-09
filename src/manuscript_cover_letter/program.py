@@ -15,7 +15,9 @@ import os
 
 from manuscript_cover_letter.modules.lib_cover_basic  import generate_cover_basic1
 from manuscript_cover_letter.modules.lib_cover_style1 import generate_cover_style1
+from manuscript_cover_letter.desktop import about
 import manuscript_cover_letter.about as about
+
 
 class DocForm(QMainWindow):
     def __init__(self):
@@ -164,6 +166,7 @@ class DocForm(QMainWindow):
 
 def main():
     signal.signal(signal.SIGINT, signal.SIG_DFL)
+    create_desktop_file()
     app = QApplication(sys.argv)
     app.setApplicationName(about.__package__) 
     window = DocForm()

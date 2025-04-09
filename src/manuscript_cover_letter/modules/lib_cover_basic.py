@@ -88,7 +88,7 @@ def generate_cover_basic1_raw(  title,
     # Corpo da carta
     add_paragraph(
         doc,
-        f"We are submitting the manuscript **{title}** to be evaluated by your journal.",
+        f"We are submitting the manuscript entitled **\"{title}\"** to be evaluated by your journal.",
         align=WD_PARAGRAPH_ALIGNMENT.JUSTIFY
     )
 

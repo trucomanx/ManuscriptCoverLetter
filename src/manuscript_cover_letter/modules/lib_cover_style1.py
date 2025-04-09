@@ -88,7 +88,7 @@ def generate_cover_style1_raw(  title,
     # Corpo da carta
     add_paragraph(
         doc,
-        f"We are pleased to submit our manuscript entitled **{title}** for consideration for publication in {journal}.",
+        f"We are pleased to submit our manuscript entitled **\"{title}\"** for consideration for publication in {journal}.",
         align=WD_PARAGRAPH_ALIGNMENT.JUSTIFY
     )
 
