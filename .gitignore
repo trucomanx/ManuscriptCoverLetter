@@ -1,2 +1,5 @@
 /src/manuscript_cover_letter/__pycache__
 /src/manuscript_cover_letter/modules/__pycache__
+/src/dist
+/src/manuscript_cover_letter.egg-info
+/src/pyproject.toml
