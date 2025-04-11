@@ -1,6 +1,6 @@
 # about.py
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 __package__ = "manuscript_cover_letter"
 __program_name__ = "manuscript-cover-letter"
 __author__ = "Fernando Pujaico Rivera" 
