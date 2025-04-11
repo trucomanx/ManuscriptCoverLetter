@@ -16,7 +16,8 @@ import os
 from manuscript_cover_letter.modules.lib_cover_basic  import generate_cover_basic1
 from manuscript_cover_letter.modules.lib_cover_style1 import generate_cover_style1
 from manuscript_cover_letter.desktop import create_desktop_file
-import manuscript_cover_letter.about as about
+from manuscript_cover_letter.wabout  import show_about_window
+import manuscript_cover_letter.about  as about
 
 
 class DocForm(QMainWindow):
@@ -28,8 +29,8 @@ class DocForm(QMainWindow):
         ## Icon
         # Get base directory for icons
         base_dir_path = os.path.dirname(os.path.abspath(__file__))
-        icon_path = os.path.join(base_dir_path, 'icons', 'logo.png')
-        self.setWindowIcon(QIcon(icon_path)) 
+        self.icon_path = os.path.join(base_dir_path, 'icons', 'logo.png')
+        self.setWindowIcon(QIcon(self.icon_path)) 
         
 
         # Dados de exemplo
@@ -97,11 +98,33 @@ class DocForm(QMainWindow):
         toolbar = QToolBar("Main Toolbar")
         self.addToolBar(toolbar)
         toolbar.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+        
+        # 
+        about_action = QAction(QIcon.fromTheme("help-about"),"About", self)
+        about_action.triggered.connect(self.open_about)
+        about_action.setToolTip("Show the information of program.")
+        toolbar.addAction(about_action)
 
+        # 
         open_action = QAction(QIcon.fromTheme("x-office-address-book"),"Open JSON", self)
         open_action.triggered.connect(self.load_from_json)
         open_action.setToolTip("Load information from JSON file.")
         toolbar.addAction(open_action)
+
+
+    def open_about(self):
+        data={
+            "version": about.__version__,
+            "package": about.__package__,
+            "program_name": about.__program_name__,
+            "author": about.__author__,
+            "email": about.__email__,
+            "description": about.__description__,
+            "url_source": about.__url_source__,
+            "url_funding": about.__url_funding__,
+            "url_bugs": about.__url_bugs__
+        }
+        show_about_window(data,self.icon_path)
 
     def load_from_json(self):
         filename, _ = QFileDialog.getOpenFileName(self, "Open JSON files", "", "JSON Files (*.json)")
@@ -166,7 +189,17 @@ class DocForm(QMainWindow):
 
 def main():
     signal.signal(signal.SIGINT, signal.SIG_DFL)
-    create_desktop_file()
+
+    create_desktop_file('~/.local/share/applications')
+    
+    for n in range(len(sys.argv)):
+        if sys.argv[n] == "--autostart":
+            create_desktop_file('~/.config/autostart', overwrite=True)
+            return
+        if sys.argv[n] == "--applications":
+            create_desktop_file('~/.local/share/applications', overwrite=True)
+            return
+
     app = QApplication(sys.argv)
     app.setApplicationName(about.__package__) 
     window = DocForm()
