@@ -15,7 +15,7 @@ import os
 
 from manuscript_cover_letter.modules.lib_cover_basic  import generate_cover_basic1
 from manuscript_cover_letter.modules.lib_cover_style1 import generate_cover_style1
-from manuscript_cover_letter.desktop import create_desktop_file
+from manuscript_cover_letter.desktop import create_desktop_file, create_desktop_directory, create_desktop_menu
 from manuscript_cover_letter.wabout  import show_about_window
 import manuscript_cover_letter.about  as about
 
@@ -190,13 +190,19 @@ class DocForm(QMainWindow):
 def main():
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
+    create_desktop_directory()    
+    create_desktop_menu()
     create_desktop_file('~/.local/share/applications')
     
     for n in range(len(sys.argv)):
         if sys.argv[n] == "--autostart":
+            create_desktop_directory(overwrite = True)
+            create_desktop_menu(overwrite = True)
             create_desktop_file('~/.config/autostart', overwrite=True)
             return
         if sys.argv[n] == "--applications":
+            create_desktop_directory(overwrite = True)
+            create_desktop_menu(overwrite = True)
             create_desktop_file('~/.local/share/applications', overwrite=True)
             return
 
