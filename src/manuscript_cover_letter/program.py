@@ -5,10 +5,10 @@ from PyQt5.QtWidgets import (
     QApplication, QWidget, QFormLayout, QLineEdit, QTextEdit,
     QVBoxLayout, QHBoxLayout, QRadioButton, QPushButton, QFrame,
     QFileDialog, QGroupBox, QLabel, QButtonGroup, QComboBox, QMessageBox,
-    QMainWindow, QAction, QToolBar
+    QMainWindow, QAction, QToolBar, QSizePolicy
 )
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QDesktopServices
 import signal
 import json
 import os
@@ -76,17 +76,17 @@ class DocForm(QMainWindow):
         layout.addLayout(form_layout)
 
         # Estilo com QComboBox (mais compacto e escalável)
-        style_box = QGroupBox("Choose style")
+        style_box = QGroupBox("Choose output style")
         style_layout = QVBoxLayout()
         self.style_combo = QComboBox()
-        self.style_combo.addItems(["basic", "style1", "json"])
+        self.style_combo.addItems(["docx basic", "docx style1", "json cover letter"])
         style_layout.addWidget(self.style_combo)
         style_box.setLayout(style_layout)
         layout.addWidget(style_box)
 
         # Botão Save As
         self.save_button = QPushButton("Save the cover letter")
-        self.save_button.clicked.connect(self.save_as_docx)
+        self.save_button.clicked.connect(self.save_file)
         layout.addWidget(self.save_button)
 
         central_widget.setLayout(layout)
@@ -99,19 +99,33 @@ class DocForm(QMainWindow):
         self.addToolBar(toolbar)
         toolbar.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
         
-        # 
-        about_action = QAction(QIcon.fromTheme("help-about"),"About", self)
-        about_action.triggered.connect(self.open_about)
-        about_action.setToolTip("Show the information of program.")
-        toolbar.addAction(about_action)
 
         # 
         open_action = QAction(QIcon.fromTheme("x-office-address-book"),"Open JSON", self)
         open_action.triggered.connect(self.load_from_json)
         open_action.setToolTip("Load information from JSON file.")
         toolbar.addAction(open_action)
+        
+        # Adicionar o espaçador
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        toolbar.addWidget(spacer)
 
+        # Coffee
+        self.coffee_action = QAction(QIcon.fromTheme("emblem-favorite"), "Coffee", self)
+        self.coffee_action.setToolTip("Buy me a coffee (TrucomanX)")
+        self.coffee_action.triggered.connect(self.on_coffee_action_click)
+        toolbar.addAction(self.coffee_action)
 
+        # 
+        about_action = QAction(QIcon.fromTheme("help-about"),"About", self)
+        about_action.triggered.connect(self.open_about)
+        about_action.setToolTip("Show the information of program.")
+        toolbar.addAction(about_action)
+
+    def on_coffee_action_click(self):
+        QDesktopServices.openUrl(QUrl("https://ko-fi.com/trucomanx"))
+        
     def open_about(self):
         data={
             "version": about.__version__,
@@ -127,7 +141,7 @@ class DocForm(QMainWindow):
         show_about_window(data,self.icon_path)
 
     def load_from_json(self):
-        filename, _ = QFileDialog.getOpenFileName(self, "Open JSON files", "", "JSON Files (*.json)")
+        filename, _ = QFileDialog.getOpenFileName(self, "Open JSON files", "", "JSON Files (*.CoverLetter.json)")
         if filename:
             try:
                 with open(filename, "r", encoding="utf-8") as f:
@@ -147,7 +161,7 @@ class DocForm(QMainWindow):
             except Exception as e:
                 QMessageBox.critical(self, "Error", f"Error loading JSON:\n{str(e)}")
 
-    def save_as_docx(self):
+    def save_file(self):
         fields_dict = {}
         for key, widget in self.input_widgets.items():
             if isinstance(widget, QTextEdit):
@@ -163,25 +177,25 @@ class DocForm(QMainWindow):
                 return
             fields_dict[key] = value
 
-        filename, _ = QFileDialog.getSaveFileName(self, "Save cover letter", "", "Word Documents (*.docx);;JSON Files (*.json)")
+        filename, _ = QFileDialog.getSaveFileName(self, "Save cover letter", "", "Word Documents (*.docx);;JSON Files (*.CoverLetter.json)")
         if filename:
             style = self.style_combo.currentText()
-            if style == "json":
-                if not filename.endswith(".json"):
-                    filename += ".json"
+            if "json" in style:
+                if not filename.endswith(".CoverLetter.json"):
+                    filename += ".CoverLetter.json"
             else:
                 if not filename.endswith(".docx"):
                     filename += ".docx"
 
-            self.generate_docx(filename, fields_dict, style)
+            self.generate_manuscript_file(filename, fields_dict, style)
 
     @staticmethod
-    def generate_docx(filename, fields_dict, style="basic"):
-        if style == "basic":
+    def generate_manuscript_file(filename, fields_dict, style="docx basic"):
+        if style == "docx basic":
             generate_cover_basic1(filename, fields_dict)
-        elif style == "style1":
+        elif style == "docx style1":
             generate_cover_style1(filename, fields_dict)
-        elif style == "json":
+        elif style == "json cover letter":
             with open(filename, 'w', encoding='utf-8') as arquivo:
                 json.dump(fields_dict, arquivo, indent=4, ensure_ascii=False)
         else:
