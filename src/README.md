@@ -6,7 +6,7 @@ Program to generate manuscript cover letters.
 
 ## 1. Installing
 
-To install the package from `PyPI`, follow the instructions below:
+To install the package from [PyPI](https://pypi.org/project/manuscript_cover_letter/), follow the instructions below:
 
 
 ```bash
