@@ -13,9 +13,12 @@ import signal
 import json
 import os
 
+from manuscript_cover_letter.modules.resources        import resource_path
 from manuscript_cover_letter.modules.lib_cover_basic  import generate_cover_basic1
 from manuscript_cover_letter.modules.lib_cover_style1 import generate_cover_style1
-from manuscript_cover_letter.desktop import create_desktop_file, create_desktop_directory, create_desktop_menu
+from manuscript_cover_letter.desktop import create_desktop_file
+from manuscript_cover_letter.desktop import create_desktop_directory
+from manuscript_cover_letter.desktop import create_desktop_menu
 from manuscript_cover_letter.wabout  import show_about_window
 import manuscript_cover_letter.about  as about
 
@@ -28,8 +31,7 @@ class DocForm(QMainWindow):
 
         ## Icon
         # Get base directory for icons
-        base_dir_path = os.path.dirname(os.path.abspath(__file__))
-        self.icon_path = os.path.join(base_dir_path, 'icons', 'logo.png')
+        self.icon_path = resource_path('icons', 'logo.png')
         self.setWindowIcon(QIcon(self.icon_path)) 
         
 
@@ -101,7 +103,7 @@ class DocForm(QMainWindow):
         
 
         # 
-        open_action = QAction(QIcon.fromTheme("x-office-address-book"),"Open JSON", self)
+        open_action = QAction(QIcon(resource_path('icons', 'open_file.png')),"Open JSON", self)
         open_action.triggered.connect(self.load_from_json)
         open_action.setToolTip("Load information from JSON file.")
         toolbar.addAction(open_action)
@@ -112,13 +114,13 @@ class DocForm(QMainWindow):
         toolbar.addWidget(spacer)
 
         # Coffee
-        self.coffee_action = QAction(QIcon.fromTheme("emblem-favorite"), "Coffee", self)
+        self.coffee_action = QAction(QIcon(resource_path('icons', 'emote-love.png')), "Coffee", self)
         self.coffee_action.setToolTip("Buy me a coffee (TrucomanX)")
         self.coffee_action.triggered.connect(self.on_coffee_action_click)
         toolbar.addAction(self.coffee_action)
 
         # 
-        about_action = QAction(QIcon.fromTheme("help-about"),"About", self)
+        about_action = QAction(QIcon(resource_path('icons', 'status_help.png')),"About", self)
         about_action.triggered.connect(self.open_about)
         about_action.setToolTip("Show the information of program.")
         toolbar.addAction(about_action)
