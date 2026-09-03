@@ -8,12 +8,24 @@ Program to generate manuscript cover letters.
 
 To install the package from [PyPI](https://pypi.org/project/manuscript_cover_letter/), follow the instructions below:
 
+### With pip
 
 ```bash
 pip install --upgrade manuscript-cover-letter
 ```
 
 Execute `which manuscript-cover-letter` to see where it was installed, probably in `/home/USERNAME/.local/bin/manuscript-cover-letter`.
+
+
+### With pipx (recommended for desktop applications)
+
+```bash
+py -m pip install --user pipx
+py -m pipx ensurepath
+pipx install manuscript_cover_letter
+```
+
+If you need to upgrade later: `pipx upgrade manuscript_cover_letter`
 
 ### Using
 

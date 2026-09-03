@@ -6,9 +6,6 @@ from docx.shared import Pt
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from datetime import datetime
 import re
-import locale
-
-
 
 
 def generate_cover_basic1( filename, dict_info ):
@@ -69,9 +66,15 @@ def generate_cover_basic1_raw(  title,
             p.alignment = align
         return p
 
-    locale.setlocale(locale.LC_TIME, 'en_US.UTF-8')
     data = datetime.now()
-    data_formatada = data.strftime(f"%-d %B of %Y") 
+
+    meses = [
+        "January", "February", "March", "April",
+        "May", "June", "July", "August",
+        "September", "October", "November", "December"
+    ]
+
+    data_formatada = f"{data.day} {meses[data.month - 1]} of {data.year}"
 
     # Cabeçalho com alinhamento à direita
     add_paragraph(doc, f"{country}, {data_formatada}", align=WD_PARAGRAPH_ALIGNMENT.RIGHT)
